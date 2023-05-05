@@ -6,17 +6,6 @@ from catboost import CatBoostRegressor
 model = CatBoostRegressor()
 model.load_model('cat_model')
 
-weight = 19363
-vehicle_size = 'TRACTOR'
-billed_miles = 1128
-pickup_state = 'TN'
-deliver_state = 'TX'
-duration_hours = 73
-
-def get_prediction(weight, vehicle_size, billed_miles, pickup_state, deliver_state, duration_hours):
-    return model.predict([weight, vehicle_size, billed_miles, pickup_state, deliver_state, duration_hours])
-
-
 app = FastAPI()
 
 origins = ['*']
