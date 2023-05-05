@@ -44,3 +44,7 @@ def predict(features: Features):
     rpm = prediction / f_dict['distance']
     return {'predicted_total': round(prediction), 'predicted_rpm': round(rpm,2)}
 
+@app.get('/')
+def root():
+    return {'message': 'make predictions through the predictor'}
+
