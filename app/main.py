@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from catboost import CatBoostRegressor
 
-model = CatBoostRegressor()
-model.load_model('cat_model')
+
+# deployment info
+# https://www.youtube.com/watch?v=h5wLuVDr0oc
+
+from app.model.model import model
+# from model.model import model
 
 app = FastAPI()
 
@@ -25,6 +28,10 @@ class Features(BaseModel):
     startLocation: str
     vehicleType: str
     weight: int
+
+@app.get('/healthcheck')
+def read_root():
+    return {"status": "ok"}
 
 @app.post('/')
 def predict(features: Features):
