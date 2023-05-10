@@ -9,6 +9,10 @@ from pydantic import BaseModel
 from app.model.model import model
 # from model.model import model
 
+from app.helpers import get_filtered_data
+# from helpers import get_filtered_data
+
+
 app = FastAPI()
 
 origins = ['*']
@@ -21,6 +25,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get('/')
+def root():
+    return {'message': 'make predictions through the predictor'}
+
 class Features(BaseModel):
     distance: int
     duration: int
@@ -29,10 +38,6 @@ class Features(BaseModel):
     vehicleType: str
     weight: int
 
-@app.get('/healthcheck')
-def read_root():
-    return {"status": "ok"}
-
 @app.post('/')
 def predict(features: Features):
     f_dict = features.dict()
@@ -40,7 +45,14 @@ def predict(features: Features):
     rpm = prediction / f_dict['distance']
     return {'predicted_total': round(prediction), 'predicted_rpm': round(rpm,2)}
 
-@app.get('/')
-def root():
-    return {'message': 'make predictions through the predictor'}
+class Times(BaseModel):
+    startDate: str
+    endDate: str
+
+@app.post('/data')
+def get_data(times: Times):
+    times_dict = times.dict()
+    data = get_filtered_data(times_dict['startDate'], times_dict['endDate'])
+    return data
+
 
