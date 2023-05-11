@@ -9,8 +9,8 @@ from pydantic import BaseModel
 from app.model.model import model
 # from model.model import model
 
-from app.helpers import get_filtered_data
-# from helpers import get_filtered_data
+from app.helpers import get_filtered_data, get_error_data
+# from helpers import get_filtered_data, get_error_data
 
 
 app = FastAPI()
@@ -55,4 +55,12 @@ def get_data(times: Times):
     data = get_filtered_data(times_dict['startDate'], times_dict['endDate'])
     return data
 
+class Label(BaseModel):
+    label: int
+
+@app.post('/error')
+def get_error_data_endpoint(label: Label):
+    label_dict = label.dict()
+    data = get_error_data(label_dict['label'])
+    return data
 

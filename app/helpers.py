@@ -1,14 +1,32 @@
 import pandas as pd
 from collections import Counter
 
-# delivery_date,weight,vehicle_size,billed_miles,total,pickup_state,deliver_state,duration_hours,rpm,predicted_cost,predicted_rpm,error,label
-# def get_all_data():
-#     df = pd.read_csv('data.csv'):
-#     data = []
-#     for
+
+def get_error_data(label):
+    df = pd.read_csv('app/data.csv')
+    # df = pd.read_csv('data.csv')
+    df = df[df['label'] == label]
+    data = []
+    for i, row in df.iterrows():
+        delivery_date = row['delivery_date']
+        weight = row['weight']
+        vehicle_size = row['vehicle_size']
+        billed_miles = row['billed_miles']
+        total = row['total']
+        pickup_state = row['pickup_state']
+        deliver_state = row['deliver_state']
+        duration_hours = row['duration_hours']
+        rpm = row['rpm']
+        predicted_rpm = row['predicted_rpm']
+        error = row['error']
+        data.append({'delivery_date': delivery_date, 'weight': weight, 'vehicle_size': vehicle_size, 'billed_miles': billed_miles,
+                     'total': total, 'pickup_state': pickup_state, 'deliver_state': deliver_state, 'duration_hours': duration_hours,
+                     'rpm': rpm, 'predicted_rpm': predicted_rpm, 'error': error})
+    return data
 
 def get_filtered_data(startDate, endDate):
     df = pd.read_csv('app/data.csv')
+    # df = pd.read_csv('data.csv')
     df['delivery_date'] = pd.to_datetime(df['delivery_date'])
     df.drop(['rpm', 'predicted_cost', 'predicted_rpm', 'error', 'label'], axis=1, inplace=True)
     df = df[(df['delivery_date'] >= startDate) & (df['delivery_date'] <= endDate)]
